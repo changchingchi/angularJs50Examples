@@ -22,14 +22,19 @@
 		</form>
 	</div>
 
-	<div ng-controller="CountryCtrl">
-		
-		<ul>
-			<li ng-repeat="country in names">
-				{{country.Country}}
-			</li>
-
-		</ul>
-	</div>
+	<table ng-controller="CountryCtrl">
+		<input type = "text" ng-model = "query" placeholder="search..">
+		<tr>
+			<th><a href="" ng-click="sortType = 'City'">City</a></th>
+			<th><a href="" ng-click="sortType = 'Country'">Country</a></th>
+			<th><a href="" ng-click="sortType = 'Name'">Name</a></th>
+		</tr>
+		<tr ng-repeat="object in JSONresponse | filter : query | orderBy:sortType"  >
+			<td>{{object.City}}</td>
+			<td>{{object.Country}}</td>
+			<td>{{object.Name}}</td>
+		</tr>
+			
+	</table>
 </body>
 </html>
