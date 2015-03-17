@@ -1,4 +1,37 @@
-angular.module('nameApp',[])
+angular.module('nameApp',['ngRoute'])
+
+.config(function($routeProvider) {
+        $routeProvider.
+          when('/', {
+            templateUrl: 'country-list.html',
+            controller: 'CountryCtrl'
+          }).
+          when('/:countryName', {
+            templateUrl: 'country-details.html',
+            controller: 'CountryDetailCtrl'
+          }).
+          otherwise({
+            redirectTo: '/'
+          });
+ })
+
+.factory('countries',function($http){
+  return { 
+      list: function(callback){
+        $http.get('CityJSON.php').success(callback);
+      },
+      find : function(name, callback){
+        $http.get('CityJSON.php').success(function(data){
+          var country = data.filter(function(entry){
+            return entry.Name === name;
+          })[0];
+          callback(country);
+        })
+      }
+  };
+})
+
+
 
 
 .controller('MainCtrl', function($scope){
@@ -15,10 +48,17 @@ angular.module('nameApp',[])
 	$scope.removeName = function(name){
 		$scope.namearray.splice($scope.namearray.indexOf(name),1);
 	}
-
 })
 
-.controller('CountryCtrl', function($scope, $http){
-		$http.get('http://www.w3schools.com/website/Customers_JSON.php')
-			.success(function(response){$scope.JSONresponse = response;})
+
+.controller('CountryCtrl', function ($scope,$http, countries){
+        countries.list(function(countries) {
+          $scope.JSONresponse = countries;
+        });
+      })
+
+ .controller('CountryDetailCtrl', function ($scope, $routeParams, countries){
+   countries.find($routeParams.countryName, function(country){
+    $scope.JSONobject= country;
+   })
 })

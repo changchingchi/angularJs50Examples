@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<title>Angularjs50examps</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js">
+   </script>
 	<script src="App.js"></script>
 </head>
 <body>
@@ -27,14 +29,16 @@
 		<tr>
 			<th><a href="" ng-click="sortType = 'City'">City</a></th>
 			<th><a href="" ng-click="sortType = 'Country'">Country</a></th>
-			<th><a href="" ng-click="sortType = 'Name'">Name</a></th>
+			<th><a href="" ng-click="sortType = 'Name'">Flag</a></th>
 		</tr>
 		<tr ng-repeat="object in JSONresponse | filter : query | orderBy:sortType"  >
-			<td>{{object.City}}</td>
-			<td>{{object.Country}}</td>
 			<td>{{object.Name}}</td>
+			<td>{{object.City}}</td>
+			<td><img ng-src="{{object.Flag}}" width="100"></img></td>
 		</tr>
 			
 	</table>
+
+	<div ng-view></div>
 </body>
 </html>
