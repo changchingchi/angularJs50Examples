@@ -16,12 +16,23 @@ angular.module('nameApp',['ngRoute'])
  })
 
 .factory('countries',function($http){
+
+  var cashedData;
+
+  function getData(callback){
+    if(cashedData){
+      callback(cashedData);
+    }else{
+      $http.get('CityJSON.php').success(function(data){
+        cashedData = data;
+        callback(data);
+      })
+    }
+  }
   return { 
-      list: function(callback){
-        $http.get('CityJSON.php').success(callback);
-      },
+      list: getData,
       find : function(name, callback){
-        $http.get('CityJSON.php').success(function(data){
+        getData(function(data){
           var country = data.filter(function(entry){
             return entry.Name === name;
           })[0];
