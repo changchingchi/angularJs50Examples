@@ -17,17 +17,12 @@ angular.module('nameApp',['ngRoute'])
 
 .factory('countries',function($http){
 
-  var cashedData;
-
   function getData(callback){
-    if(cashedData){
-      callback(cashedData);
-    }else{
-      $http.get('CityJSON.php').success(function(data){
-        cashedData = data;
-        callback(data);
-      })
-    }
+    $http({
+      method: 'GET',
+      url : 'CityJSON.php',
+      cache: true
+    }).success(callback);
   }
   return { 
       list: getData,
