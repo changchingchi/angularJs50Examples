@@ -6,7 +6,7 @@ angular.module('nameApp',['ngRoute'])
             templateUrl: 'country-list.html',
             controller: 'CountryCtrl'
           }).
-          when('/:countryName', {
+          when('/:countryID', {
             templateUrl: 'country-details.html',
             controller: 'CountryDetailCtrl'
           }).
@@ -17,22 +17,20 @@ angular.module('nameApp',['ngRoute'])
 
 .factory('countries',function($http){
 
-  function getData(callback){
-    $http({
-      method: 'GET',
-      url : 'CityJSON.php',
-      cache: true
-    }).success(callback);
-  }
   return { 
-      list: getData,
-      find : function(name, callback){
-        getData(function(data){
-          var country = data.filter(function(entry){
-            return entry.Name === name;
-          })[0];
-          callback(country);
-        })
+      list: function(callback){
+        $http({
+          method: 'GET',
+          url: 'countries.json',
+          cache : true
+        }).success(callback);
+      },
+      find : function(id, callback){
+        $http({
+          method: 'GET',
+          url: 'countries_' + id + '.json',
+          cache : true
+        }).success(callback);
       }
   };
 })
@@ -63,8 +61,9 @@ angular.module('nameApp',['ngRoute'])
         });
       })
 
- .controller('CountryDetailCtrl', function ($scope, $routeParams, countries){
-   countries.find($routeParams.countryName, function(country){
-    $scope.JSONobject= country;
-   })
-})
+.controller('CountryDetailCtrl', function ($scope, $routeParams, countries){
+        countries.find($routeParams.countryID, function(country) {
+          $scope.JSONobject = country[0];
+          console.log(country);
+        });
+      })
